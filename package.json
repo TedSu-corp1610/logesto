@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "db:seed": "node config/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie": "^2.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "pug": "^3.0.4",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^6.0.1"
+  }
+}

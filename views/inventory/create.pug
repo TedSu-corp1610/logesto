@@ -1,0 +1,47 @@
+extends ../layouts/main
+
+block content
+    .page-header
+        div
+            h1 Nouvel inventaire
+            p Sélectionnez la localisation à compter.
+
+    .card.form-card
+        if error
+            .alert.alert-danger
+                = error
+
+        form(
+            method="POST"
+            action="/inventory/create"
+        )
+            .form-group
+                label(
+                    for="location_id"
+                ) Localisation
+
+                select#location_id(
+                    name="location_id"
+                    required
+                )
+                    option(
+                        value=""
+                    ) Sélectionner une localisation
+
+                    each location in locations
+                        if location.status === 'active'
+                            option(
+                                value=location.id
+                            )
+                                | #{location.store_name} — #{location.name} (#{location.code})
+
+            .form-actions
+                a.btn.btn-secondary(
+                    href="/inventory"
+                )
+                    | Annuler
+
+                button.btn.btn-primary(
+                    type="submit"
+                )
+                    | Créer l'inventaire

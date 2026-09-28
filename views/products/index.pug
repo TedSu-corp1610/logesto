@@ -1,0 +1,90 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Produits
+            p Catalogue des produits
+
+        if permissions.includes('products.manage')
+            a.btn.btn-primary(href="/products/create")
+                | Nouveau produit
+
+    .panel
+
+        .panel-header
+            h2 Liste des produits
+
+        if products.length
+            .table-wrapper
+                table.data-table
+                    thead
+                        tr
+                            th SKU
+                            th Produit
+                            th Catégorie
+                            th Prix achat
+                            th Prix vente
+                            th Stock minimum
+                            th Statut
+                            th Actions
+
+                    tbody
+                        each product in products
+                            tr
+                                td
+                                    code= product.sku
+
+                                td
+                                    strong= product.name
+
+                                td
+                                    if product.category_name
+                                        = product.category_name
+                                    else
+                                        span.text-muted Non classé
+
+                                td
+                                    = Number(product.purchase_price).toFixed(2)
+
+                                td
+                                    = Number(product.sale_price).toFixed(2)
+
+                                td
+                                    | #{product.minimum_stock} #{product.unit}
+
+                                td
+                                    if product.status === 'active'
+                                        span.badge.badge-success Actif
+                                    else
+                                        span.badge.badge-danger Inactif
+
+                                td
+                                    .table-actions
+                                        if permissions.includes('products.manage')
+                                            a.btn.btn-sm.btn-secondary(
+                                                href=`/products/${product.id}/edit`
+                                            )
+                                                | Modifier
+
+                                            form(
+                                                action=`/products/${product.id}/delete`
+                                                method="POST"
+                                                onsubmit="return confirm('Supprimer ce produit ?');"
+                                            )
+                                                button.btn.btn-sm.btn-danger(
+                                                    type="submit"
+                                                )
+                                                    | Supprimer
+
+        else
+            .empty-state
+                h3 Aucun produit
+                p Commencez par créer votre premier produit.
+
+                if permissions.includes('products.manage')
+                    a.btn.btn-primary(
+                        href="/products/create"
+                    )
+                        | Créer un produit

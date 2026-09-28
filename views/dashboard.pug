@@ -1,0 +1,179 @@
+extends layouts/main
+
+block content
+
+    //- =====================================
+    //- STATISTIQUES
+    //- =====================================
+
+    .stats-grid
+
+        .stat-card.stat-blue
+
+            .stat-content
+
+                .stat-number
+                    | #{stats && stats.users ? stats.users : 0}
+
+                .stat-label
+                    | Utilisateurs
+
+            .stat-icon
+                | 👥
+
+
+        .stat-card.stat-green
+
+            .stat-content
+
+                .stat-number
+                    | #{stats && stats.roles ? stats.roles : 0}
+
+                .stat-label
+                    | Rôles
+
+            .stat-icon
+                | 🔑
+
+
+        .stat-card.stat-orange
+
+            .stat-content
+
+                .stat-number
+                    | #{stats && stats.messages ? stats.messages : 0}
+
+                .stat-label
+                    | Messages
+
+            .stat-icon
+                | 💬
+
+
+        .stat-card.stat-red
+
+            .stat-content
+
+                .stat-number
+                    | #{stats && stats.permissions ? stats.permissions : 0}
+
+                .stat-label
+                    | Permissions
+
+            .stat-icon
+                | 🛡️
+
+
+    //- =====================================
+    //- CONTENU
+    //- =====================================
+
+    .dashboard-grid
+
+        .panel
+
+            .panel-header
+
+                h2
+                    | Activité récente
+
+                a.panel-link(
+                    href="#"
+                )
+                    | Voir tout
+
+            .panel-body
+
+                .activity-list
+
+                    .activity-item
+
+                        .activity-icon
+                            | 👤
+
+                        .activity-content
+
+                            strong
+                                | Nouvelle connexion
+
+                            span
+                                | Un utilisateur vient de se connecter.
+
+                            small
+                                | Il y a quelques minutes
+
+
+                    .activity-item
+
+                        .activity-icon
+                            | 👥
+
+                        .activity-content
+
+                            strong
+                                | Utilisateur créé
+
+                            span
+                                | Un nouveau compte a été enregistré.
+
+                            small
+                                | Il y a 10 minutes
+
+
+                    .activity-item
+
+                        .activity-icon
+                            | 🔐
+
+                        .activity-content
+
+                            strong
+                                | Permission modifiée
+
+                            span
+                                | Les permissions d'un rôle ont été modifiées.
+
+                            small
+                                | Il y a 25 minutes
+
+
+        .panel
+
+            .panel-header
+
+                h2
+                    | Mon compte
+
+            .panel-body
+
+                .profile-summary
+
+                    .profile-avatar
+                        | #{user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+
+                    h3
+                        | #{user ? user.username : 'Utilisateur'}
+
+                    p
+                        | #{user ? user.email : ''}
+
+                    if user && user.role_name
+
+                        span.badge
+                            | #{user.role_name}
+
+
+                    .profile-actions
+
+                        a.btn.btn-primary(
+                            href="/profile"
+                        )
+                            | Mon profil
+
+
+                        if permissions && permissions.includes('chat.use')
+
+                            a.btn.btn-secondary(
+                                href="/chat"
+                            )
+                                | Ouvrir le chat

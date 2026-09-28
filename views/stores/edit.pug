@@ -1,0 +1,119 @@
+extends ../layouts/main
+
+block content
+
+    .panel.form-panel
+
+        .panel-header
+            h2
+                | Modifier le magasin
+
+        .panel-body
+
+            form(
+                action="/stores/" + store.id + "/edit"
+                method="POST"
+            )
+
+                .form-group
+
+                    label(for="name")
+                        | Nom du magasin
+
+                    input.form-control(
+                        type="text"
+                        id="name"
+                        name="name"
+                        value=store.name
+                        required
+                    )
+
+
+                .form-group
+
+                    label(for="code")
+                        | Code
+
+                    input.form-control(
+                        type="text"
+                        id="code"
+                        name="code"
+                        value=store.code
+                        required
+                    )
+
+
+                .form-group
+
+                    label(for="address")
+                        | Adresse
+
+                    textarea.form-control(
+                        id="address"
+                        name="address"
+                        rows="3"
+                    ) #{store.address || ''}
+
+
+                .form-row
+
+                    .form-group
+
+                        label(for="phone")
+                            | Téléphone
+
+                        input.form-control(
+                            type="text"
+                            id="phone"
+                            name="phone"
+                            value=store.phone || ''
+                        )
+
+
+                    .form-group
+
+                        label(for="email")
+                            | Email
+
+                        input.form-control(
+                            type="email"
+                            id="email"
+                            name="email"
+                            value=store.email || ''
+                        )
+
+
+                .form-group
+
+                    label(for="status")
+                        | Statut
+
+                    select.form-control(
+                        id="status"
+                        name="status"
+                    )
+
+                        option(
+                            value="active"
+                            selected=store.status === 'active'
+                        )
+                            | Actif
+
+                        option(
+                            value="inactive"
+                            selected=store.status === 'inactive'
+                        )
+                            | Inactif
+
+
+                .form-actions
+
+                    a.btn.btn-secondary(
+                        href="/stores"
+                    )
+                        | Annuler
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Enregistrer

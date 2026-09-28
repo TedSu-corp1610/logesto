@@ -1,0 +1,129 @@
+extends ../layouts/main
+
+block content
+
+    .page-toolbar
+
+        .page-toolbar-left
+            h2
+                | Magasins
+
+            p
+                | Gérez les différents magasins de l'entreprise.
+
+        if permissions && permissions.includes('stores.manage')
+            .page-toolbar-right
+                a.btn.btn-primary(
+                    href="/stores/create"
+                )
+                    | + Nouveau magasin
+
+
+    .panel
+
+        .panel-header
+
+            h2
+                | Liste des magasins
+
+            input.form-control.table-search(
+                type="search"
+                placeholder="Rechercher..."
+                data-table-search="#storesTable"
+            )
+
+
+        .panel-body.no-padding
+
+            table.data-table#storesTable
+
+                thead
+
+                    tr
+                        th
+                            | Code
+
+                        th
+                            | Nom
+
+                        th
+                            | Téléphone
+
+                        th
+                            | Email
+
+                        th
+                            | Statut
+
+                        th
+                            | Actions
+
+
+                tbody
+
+                    if stores.length
+
+                        each store in stores
+
+                            tr
+
+                                td
+                                    strong
+                                        | #{store.code}
+
+                                td
+                                    | #{store.name}
+
+                                td
+                                    | #{store.phone || '—'}
+
+                                td
+                                    | #{store.email || '—'}
+
+                                td
+
+                                    if store.status === 'active'
+                                        span.badge.badge-success
+                                            | Actif
+                                    else
+                                        span.badge
+                                            | Inactif
+
+
+                                td.table-actions
+
+                                    if permissions && permissions.includes('stores.manage')
+
+                                        a.btn.btn-sm.btn-secondary(
+                                            href="/stores/" + store.id + "/edit"
+                                        )
+                                            | Modifier
+
+
+                                        form(
+                                            action="/stores/" + store.id + "/delete"
+                                            method="POST"
+                                            onsubmit="return confirm('Supprimer ce magasin ?');"
+                                        )
+
+                                            button.btn.btn-sm.btn-danger(
+                                                type="submit"
+                                            )
+                                                | Supprimer
+
+                    else
+
+                        tr
+
+                            td(colspan="6")
+
+                                .empty-state
+
+                                    .empty-state-icon
+                                        | 🏪
+
+                                    h3
+                                        | Aucun magasin
+
+                                    p
+                                        | Aucun magasin n'est enregistré.

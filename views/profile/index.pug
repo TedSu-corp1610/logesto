@@ -1,0 +1,128 @@
+extends ../layouts/main
+
+block content
+
+    if typeof success !== 'undefined' && success
+        .alert.alert-success
+            | #{success}
+
+    .profile-grid
+
+        .panel
+            .panel-header
+                h2
+                    | Informations personnelles
+
+            .panel-body
+
+                .profile-header
+                    .profile-avatar.profile-avatar-large
+                        | #{user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+
+                    .profile-header-info
+                        h2
+                            | #{user.username}
+
+                        p
+                            | #{user.email}
+
+                        if user.role_name
+                            span.badge
+                                | #{user.role_name}
+
+                form(
+                    action="/profile"
+                    method="POST"
+                )
+
+                    .form-grid
+
+                        .form-group
+                            label(for="username")
+                                | Nom d'utilisateur
+
+                            input.form-control(
+                                type="text"
+                                id="username"
+                                name="username"
+                                value=user.username
+                                required
+                            )
+
+                        .form-group
+                            label(for="email")
+                                | Adresse email
+
+                            input.form-control(
+                                type="email"
+                                id="email"
+                                name="email"
+                                value=user.email
+                                required
+                            )
+
+                    .form-actions
+                        button.btn.btn-primary(
+                            type="submit"
+                        )
+                            | Enregistrer les modifications
+
+
+        .panel
+            .panel-header
+                h2
+                    | Sécurité
+
+            .panel-body
+
+                p.form-help
+                    | Modifiez votre mot de passe régulièrement pour protéger votre compte.
+
+                form(
+                    action="/profile/password"
+                    method="POST"
+                )
+
+                    .form-group
+                        label(for="currentPassword")
+                            | Mot de passe actuel
+
+                        input.form-control(
+                            type="password"
+                            id="currentPassword"
+                            name="currentPassword"
+                            autocomplete="current-password"
+                            required
+                        )
+
+                    .form-group
+                        label(for="newPassword")
+                            | Nouveau mot de passe
+
+                        input.form-control(
+                            type="password"
+                            id="newPassword"
+                            name="newPassword"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        )
+
+                    .form-group
+                        label(for="confirmPassword")
+                            | Confirmer le nouveau mot de passe
+
+                        input.form-control(
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        )
+
+                    .form-actions
+                        button.btn.btn-primary(
+                            type="submit"
+                        )
+                            | Modifier le mot de passe

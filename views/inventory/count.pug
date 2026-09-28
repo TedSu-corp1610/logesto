@@ -1,0 +1,102 @@
+extends ../layouts/main
+
+block content
+    .page-header
+        div
+            h1 Comptage inventaire
+            p
+                | #{inventory.reference} —
+                |  #{inventory.store_name} /
+                |  #{inventory.location_name}
+
+        a.btn.btn-secondary(
+            href="/inventory"
+        )
+            | Retour
+
+    if error
+        .alert.alert-danger
+            = error
+
+    .card
+        .card-header
+            div
+                h2 Comptage physique
+                p.text-muted
+                    | Saisissez la quantité réellement présente.
+
+            if inventory.status === 'DRAFT'
+                form(
+                    id="inventory-complete-form"
+                    method="POST"
+                    action="/inventory/" + inventory.id + "/complete"
+                )
+                    button.btn.btn-success(
+                        type="submit"
+                        onclick="return confirm('Valider définitivement cet inventaire et régulariser le stock ?')"
+                    )
+                        | Valider l'inventaire
+
+        .table-wrapper
+            table.data-table
+                thead
+                    tr
+                        th Produit
+                        th SKU
+                        th Stock théorique
+                        th Quantité comptée
+                        th Écart
+                        th Unité
+                        th Action
+
+                tbody
+                    each item in items
+                        tr
+                            td
+                                strong= item.product_name
+
+                            td= item.sku
+
+                            td
+                                | #{item.theoretical_quantity}
+
+                            td
+                                if inventory.status === 'DRAFT'
+                                    form.inventory-count-form(
+                                        id="inventory-form-" + item.id
+                                        method="POST"
+                                        action="/inventory/" + inventory.id + "/items/" + item.id
+                                    )
+                                        input(
+                                            type="number"
+                                            name="counted_quantity"
+                                            min="0"
+                                            step="0.01"
+                                            value=item.counted_quantity
+                                            required
+                                        )
+                                else
+                                    | #{item.counted_quantity}
+
+                            td
+                                if item.difference > 0
+                                    span.badge.badge-success
+                                        | +#{item.difference}
+                                else if item.difference < 0
+                                    span.badge.badge-danger
+                                        | #{item.difference}
+                                else
+                                    span.badge.badge-success
+                                        | 0
+
+                            td= item.unit
+
+                            td
+                                if inventory.status === 'DRAFT'
+                                    button.btn.btn-primary.btn-small(
+                                        type="submit"
+                                        form="inventory-form-" + item.id
+                                    )
+                                        | Enregistrer
+                                else
+                                    span.text-muted -

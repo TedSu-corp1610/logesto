@@ -1,0 +1,90 @@
+extends ../layouts/main
+
+block content
+    .page-header
+        div
+            h1 Nouveau transfert
+            p Déplacer un produit d'un emplacement vers un autre.
+
+    .card.form-card
+        if error
+            .alert.alert-danger
+                = error
+
+        form(
+            method="POST"
+            action="/stock-transfers/create"
+        )
+            .form-row
+                .form-group
+                    label(for="product_id") Produit
+
+                    select#product_id(
+                        name="product_id"
+                        required
+                    )
+                        option(value="") Sélectionner un produit
+
+                        each product in products
+                            option(value=product.id)
+                                | #{product.name} — #{product.sku}
+
+                .form-group
+                    label(for="quantity") Quantité
+
+                    input#quantity(
+                        type="number"
+                        name="quantity"
+                        min="0.01"
+                        step="0.01"
+                        required
+                    )
+
+            .form-row
+                .form-group
+                    label(for="source_location_id") Localisation source
+
+                    select#source_location_id(
+                        name="source_location_id"
+                        required
+                    )
+                        option(value="") Sélectionner la source
+
+                        each location in locations
+                            if location.status === 'active'
+                                option(value=location.id)
+                                    | #{location.store_name} — #{location.name} (#{location.code})
+
+                .form-group
+                    label(for="destination_location_id") Localisation destination
+
+                    select#destination_location_id(
+                        name="destination_location_id"
+                        required
+                    )
+                        option(value="") Sélectionner la destination
+
+                        each location in locations
+                            if location.status === 'active'
+                                option(value=location.id)
+                                    | #{location.store_name} — #{location.name} (#{location.code})
+
+            .form-group
+                label(for="reason") Motif
+
+                textarea#reason(
+                    name="reason"
+                    rows="4"
+                    placeholder="Ex. Réapprovisionnement de la boutique..."
+                )
+
+            .form-actions
+                a.btn.btn-secondary(
+                    href="/stock-transfers"
+                )
+                    | Annuler
+
+                button.btn.btn-primary(
+                    type="submit"
+                )
+                    | Créer le transfert

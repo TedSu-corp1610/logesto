@@ -1,0 +1,92 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Fournisseurs
+            p Gestion des fournisseurs
+
+            if permissions.includes('suppliers.manage')
+                a.btn.btn-primary(href="/suppliers/create")
+                    | Nouveau fournisseur
+
+    .panel
+
+        .panel-header
+            h2 Liste des fournisseurs
+
+        if suppliers.length
+            .table-wrapper
+                table.data-table
+                    thead
+                        tr
+                            th Nom
+                            th Code
+                            th Contact
+                            th Téléphone
+                            th Email
+                            th Statut
+                            th Actions
+
+                    tbody
+                        each supplier in suppliers
+                            tr
+                                td
+                                    strong= supplier.name
+
+                                td
+                                    code= supplier.code
+
+                                td
+                                    if supplier.contact_name
+                                        = supplier.contact_name
+                                    else
+                                        span.text-muted —
+
+                                td
+                                    if supplier.phone
+                                        = supplier.phone
+                                    else
+                                        span.text-muted —
+
+                                td
+                                    if supplier.email
+                                        = supplier.email
+                                    else
+                                        span.text-muted —
+
+                                td
+                                    if supplier.status === 'active'
+                                        span.badge.badge-success Active
+                                    else
+                                        span.badge.badge-danger Inactive
+
+                                td
+                                    .table-actions
+                                        if permissions.includes('suppliers.manage')
+                                            a.btn.btn-sm.btn-secondary(
+                                                href=`/suppliers/${supplier.id}/edit`
+                                            )
+                                                | Modifier
+
+                                            form(
+                                                action=`/suppliers/${supplier.id}/delete`
+                                                method="POST"
+                                                onsubmit="return confirm('Supprimer ce fournisseur ?');"
+                                            )
+                                                button.btn.btn-sm.btn-danger(
+                                                    type="submit"
+                                                )
+                                                    | Supprimer
+
+        else
+            .empty-state
+                h3 Aucun fournisseur
+                p Commencez par créer votre premier fournisseur.
+
+                if permissions.includes('suppliers.manage')
+                    a.btn.btn-primary(
+                        href="/suppliers/create"
+                    )
+                        | Créer un fournisseur

@@ -1,0 +1,93 @@
+extends ../layouts/main
+
+block content
+    .page-header
+        div
+            h1 Inventaires
+            p Contrôle physique et régularisation des stocks.
+
+        if permissions && permissions.includes('stock.inventory')
+            a.btn.btn-primary(
+                href="/inventory/create"
+            )
+                | Nouvel inventaire
+
+    .card
+        .card-header
+            h2 Historique des inventaires
+
+        .table-wrapper
+            table.data-table
+                thead
+                    tr
+                        th Référence
+                        th Magasin
+                        th Localisation
+                        th Produits
+                        th Écarts
+                        th Statut
+                        th Créé par
+                        th Date
+                        th Actions
+
+                tbody
+                    if inventories.length
+                        each inventory in inventories
+                            tr
+                                td
+                                    strong= inventory.reference
+
+                                td
+                                    | #{inventory.store_name}
+
+                                td
+                                    | #{inventory.location_name}
+                                    |  (#{inventory.location_code})
+
+                                td= inventory.item_count
+
+                                td
+                                    if inventory.difference_count > 0
+                                        span.badge.badge-warning
+                                            | #{inventory.difference_count} écart(s)
+                                    else
+                                        span.badge.badge-success
+                                            | Aucun écart
+
+                                td
+                                    if inventory.status === 'DRAFT'
+                                        span.badge.badge-warning Brouillon
+                                    else if inventory.status === 'COMPLETED'
+                                        span.badge.badge-success Terminé
+                                    else if inventory.status === 'CANCELLED'
+                                        span.badge.badge-danger Annulé
+                                    else
+                                        span.badge= inventory.status
+
+                                td= inventory.created_by_username || '-'
+
+                                td= inventory.created_at
+
+                                td
+                                    .table-actions
+                                        if inventory.status === 'DRAFT'
+                                            a.btn.btn-primary.btn-small(
+                                                href="/inventory/" + inventory.id + "/count"
+                                            )
+                                                | Comptage
+
+                                            form(
+                                                method="POST"
+                                                action="/inventory/" + inventory.id + "/cancel"
+                                            )
+                                                button.btn.btn-danger.btn-small(
+                                                    type="submit"
+                                                    onclick="return confirm('Annuler cet inventaire ?')"
+                                                )
+                                                    | Annuler
+                    else
+                        tr
+                            td.empty-state(
+                                colspan="9"
+                            )
+                                | Aucun inventaire enregistré.

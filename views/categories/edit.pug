@@ -1,0 +1,56 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Modifier la catégorie
+            p Modifier les informations de la catégorie
+
+    .panel
+
+        if error
+            .alert.alert-danger
+                = error
+
+        form.form(
+            action=`/categories/${category.id}/edit`
+            method="POST"
+        )
+
+            .form-group
+                label(for="name") Nom
+                input#name(
+                    type="text"
+                    name="name"
+                    value=category.name
+                    required
+                    maxlength="100"
+                )
+
+            .form-group
+                label(for="description") Description
+                textarea#description(
+                    name="description"
+                    rows="5"
+                    maxlength="500"
+                )= category.description || ''
+
+            .form-group
+                label(for="status") Statut
+                select#status(name="status")
+                    option(
+                        value="active"
+                        selected=category.status === 'active'
+                    ) Active
+                    option(
+                        value="inactive"
+                        selected=category.status === 'inactive'
+                    ) Inactive
+
+            .form-actions
+                a.btn.btn-secondary(href="/categories")
+                    | Annuler
+
+                button.btn.btn-primary(type="submit")
+                    | Enregistrer

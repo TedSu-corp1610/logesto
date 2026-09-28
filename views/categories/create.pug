@@ -1,0 +1,41 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Nouvelle catégorie
+            p Ajouter une catégorie de produits
+
+    .panel
+
+        if error
+            .alert.alert-danger
+                = error
+
+        form.form(action="/categories/create" method="POST")
+
+            .form-group
+                label(for="name") Nom
+                input#name(
+                    type="text"
+                    name="name"
+                    value=form && form.name ? form.name : ''
+                    required
+                    maxlength="100"
+                )
+
+            .form-group
+                label(for="description") Description
+                textarea#description(
+                    name="description"
+                    rows="5"
+                    maxlength="500"
+                )= form && form.description ? form.description : ''
+
+            .form-actions
+                a.btn.btn-secondary(href="/categories")
+                    | Annuler
+
+                button.btn.btn-primary(type="submit")
+                    | Créer la catégorie

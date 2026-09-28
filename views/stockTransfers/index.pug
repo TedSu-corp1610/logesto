@@ -1,0 +1,103 @@
+extends ../layouts/main
+
+block content
+    .page-header
+        div
+            h1 Transferts de stock
+            p Déplacement de produits entre deux emplacements.
+
+        if permissions && permissions.includes('stock.transfers.manage')
+            a.btn.btn-primary(href="/stock-transfers/create")
+                | Nouveau transfert
+
+    .card
+        .card-header
+            h2 Historique des transferts
+
+        .table-wrapper
+            table.data-table
+                thead
+                    tr
+                        th Référence
+                        th Produit
+                        th Source
+                        th Destination
+                        th Quantité
+                        th Statut
+                        th Créé par
+                        th Date
+                        th Actions
+
+                tbody
+                    if transfers.length
+                        each transfer in transfers
+                            tr
+                                td
+                                    strong= transfer.reference
+
+                                td
+                                    div
+                                        strong= transfer.product_name
+                                    small
+                                        | SKU : #{transfer.sku}
+
+                                td
+                                    div
+                                        strong= transfer.source_store_name
+                                    small
+                                        | #{transfer.source_location_name} (#{transfer.source_location_code})
+
+                                td
+                                    div
+                                        strong= transfer.destination_store_name
+                                    small
+                                        | #{transfer.destination_location_name} (#{transfer.destination_location_code})
+
+                                td
+                                    | #{transfer.quantity} #{transfer.unit}
+
+                                td
+                                    if transfer.status === 'PENDING'
+                                        span.badge.badge-warning En attente
+                                    else if transfer.status === 'COMPLETED'
+                                        span.badge.badge-success Terminé
+                                    else if transfer.status === 'CANCELLED'
+                                        span.badge.badge-danger Annulé
+                                    else
+                                        span.badge= transfer.status
+
+                                td= transfer.created_by_username || '-'
+
+                                td= transfer.created_at
+
+                                td
+                                    if transfer.status === 'PENDING' && permissions && permissions.includes('stock.transfers.manage')
+                                        .table-actions
+                                            form(
+                                                method="POST"
+                                                action="/stock-transfers/" + transfer.id + "/complete"
+                                            )
+                                                button.btn.btn-success.btn-small(
+                                                    type="submit"
+                                                    onclick="return confirm('Valider ce transfert ?')"
+                                                )
+                                                    | Valider
+
+                                            form(
+                                                method="POST"
+                                                action="/stock-transfers/" + transfer.id + "/cancel"
+                                            )
+                                                button.btn.btn-danger.btn-small(
+                                                    type="submit"
+                                                    onclick="return confirm('Annuler ce transfert ?')"
+                                                )
+                                                    | Annuler
+                                    else
+                                        span.text-muted -
+                    else
+                        tr
+                            td(
+                                colspan="9"
+                                class="empty-state"
+                            )
+                                | Aucun transfert enregistré.

@@ -1,0 +1,103 @@
+extends ../layouts/main
+
+block content
+
+    .page-toolbar
+
+        .page-toolbar-left
+            h2
+                | Liste des permissions
+
+            p
+                | Gérez les permissions disponibles dans l'application.
+
+        if permissions && permissions.includes('permissions.manage')
+            .page-toolbar-right
+                a.btn.btn-primary(
+                    href="/permissions/create"
+                )
+                    | + Nouvelle permission
+
+
+    .panel
+
+        .panel-header
+
+            h2
+                | Permissions
+
+            input.form-control.table-search(
+                type="search"
+                placeholder="Rechercher..."
+                data-table-search="#permissionsTable"
+            )
+
+
+        .panel-body.no-padding
+
+            table.data-table#permissionsTable
+
+                thead
+                    tr
+                        th
+                            | Nom
+
+                        th
+                            | Description
+
+                        th
+                            | Actions
+
+
+                tbody
+
+                    if permissions.length
+
+                        each permission in permissions
+
+                            tr
+
+                                td
+                                    strong
+                                        | #{permission.name}
+
+                                td
+                                    | #{permission.description || '—'}
+
+                                td.table-actions
+
+                                    if permissions && permissions.includes('permissions.manage')
+
+                                        a.btn.btn-sm.btn-secondary(
+                                            href="/permissions/" + permission.id + "/edit"
+                                        )
+                                            | Modifier
+
+
+                                        form(
+                                            action="/permissions/" + permission.id + "/delete"
+                                            method="POST"
+                                            onsubmit="return confirm('Supprimer cette permission ?');"
+                                        )
+
+                                            button.btn.btn-sm.btn-danger(
+                                                type="submit"
+                                            )
+                                                | Supprimer
+
+                    else
+
+                        tr
+
+                            td(colspan="3")
+
+                                .empty-state
+
+                                    .empty-state-icon
+                                        | 🔐
+
+                                    h3
+                                        | Aucune permission
+
+                                    p
+                                        | Aucune permission n'est enregistrée.

@@ -1,0 +1,145 @@
+extends ../layouts/main
+
+block content
+
+    .page-toolbar
+
+        .page-toolbar-left
+
+            h2
+                | Emplacements
+
+            p
+                | Gérez les emplacements de stockage de vos magasins.
+
+
+        if permissions && permissions.includes('locations.manage')
+
+            .page-toolbar-right
+
+                a.btn.btn-primary(
+                    href="/stock-locations/create"
+                )
+                    | + Nouvel emplacement
+
+
+    .panel
+
+        .panel-header
+
+            h2
+                | Liste des emplacements
+
+            input.form-control.table-search(
+                type="search"
+                placeholder="Rechercher..."
+                data-table-search="#locationsTable"
+            )
+
+
+        .panel-body.no-padding
+
+            table.data-table#locationsTable
+
+                thead
+
+                    tr
+
+                        th
+                            | Magasin
+
+                        th
+                            | Code
+
+                        th
+                            | Emplacement
+
+                        th
+                            | Description
+
+                        th
+                            | Statut
+
+                        th
+                            | Actions
+
+
+                tbody
+
+                    if locations.length
+
+                        each location in locations
+
+                            tr
+
+                                td
+                                    strong
+                                        | #{location.store_name}
+
+                                    if location.store_code
+                                        small.form-help
+                                            | #{location.store_code}
+
+
+                                td
+                                    | #{location.code}
+
+
+                                td
+                                    | #{location.name}
+
+
+                                td
+                                    | #{location.description || '—'}
+
+
+                                td
+
+                                    if location.status === 'active'
+
+                                        span.badge.badge-success
+                                            | Actif
+
+                                    else
+
+                                        span.badge
+                                            | Inactif
+
+
+                                td.table-actions
+
+                                    if permissions && permissions.includes('locations.manage')
+
+                                        a.btn.btn-sm.btn-secondary(
+                                            href="/stock-locations/" + location.id + "/edit"
+                                        )
+                                            | Modifier
+
+
+                                        form(
+                                            action="/stock-locations/" + location.id + "/delete"
+                                            method="POST"
+                                            onsubmit="return confirm('Supprimer cet emplacement ?');"
+                                        )
+
+                                            button.btn.btn-sm.btn-danger(
+                                                type="submit"
+                                            )
+                                                | Supprimer
+
+                    else
+
+                        tr
+
+                            td(colspan="6")
+
+                                .empty-state
+
+                                    .empty-state-icon
+                                        | 📦
+
+                                    h3
+                                        | Aucun emplacement
+
+                                    p
+                                        | Aucun emplacement de stockage n'est enregistré.

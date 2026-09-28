@@ -1,0 +1,75 @@
+doctype html
+html(lang="fr")
+    head
+        meta(charset="UTF-8")
+
+        meta(
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        )
+
+        meta(
+            name="description"
+            content="Administration"
+        )
+
+        title #{title || 'Dashboard'}
+
+        link(
+            rel="stylesheet"
+            href="/css/app.css"
+        )
+
+    body.app-body
+
+        .app-wrapper
+
+            //- =========================
+            //- NAVBAR
+            //- =========================
+
+            include ../partials/navbar
+
+
+            //- =========================
+            //- SIDEBAR
+            //- =========================
+
+            include ../partials/sidebar
+
+
+            //- =========================
+            //- CONTENT
+            //- =========================
+
+            main.main-content
+
+                .content-header
+
+                    .content-title
+
+                        h1
+                            | #{pageTitle || title}
+
+                        if breadcrumb
+                            span.breadcrumb
+                                | #{breadcrumb}
+
+
+                .content-body
+
+                    block content
+
+
+            //- =========================
+            //- FOOTER
+            //- =========================
+
+            include ../partials/footer
+
+
+        script(
+            src="/js/app.js"
+        )
+
+        block scripts

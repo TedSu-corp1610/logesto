@@ -1,0 +1,60 @@
+extends ../layouts/main
+
+block content
+
+    .panel.form-panel
+
+        .panel-header
+
+            h2
+                | Créer une permission
+
+
+        .panel-body
+
+            form(
+                action="/permissions/create"
+                method="POST"
+            )
+
+                .form-group
+
+                    label(for="name")
+                        | Nom de la permission
+
+                    input.form-control(
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Ex: users.create"
+                        required
+                    )
+
+                    small.form-help
+                        | Utilisez une notation du type module.action.
+
+
+                .form-group
+
+                    label(for="description")
+                        | Description
+
+                    textarea.form-control(
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Description de la permission"
+                    )
+
+
+                .form-actions
+
+                    a.btn.btn-secondary(
+                        href="/permissions"
+                    )
+                        | Annuler
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Créer la permission

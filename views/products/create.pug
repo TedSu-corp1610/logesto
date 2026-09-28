@@ -1,0 +1,174 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Nouveau produit
+            p Ajouter un produit au catalogue
+
+    .panel
+
+        if error
+            .alert.alert-danger
+                = error
+
+        form.form(
+            action="/products/create"
+            method="POST"
+        )
+
+            .form-row
+
+                .form-group
+                    label(for="sku") SKU
+                    input#sku(
+                        type="text"
+                        name="sku"
+                        value=form && form.sku ? form.sku : ''
+                        required
+                        maxlength="100"
+                        style="text-transform: uppercase;"
+                    )
+
+                .form-group
+                    label(for="name") Nom du produit
+                    input#name(
+                        type="text"
+                        name="name"
+                        value=form && form.name ? form.name : ''
+                        required
+                        maxlength="200"
+                    )
+
+            .form-row
+
+                .form-group
+                    label(for="category_id") Catégorie
+
+                    select#category_id(
+                        name="category_id"
+                    )
+                        option(value="") -- Aucune catégorie --
+
+                        each category in categories
+                            option(
+                                value=category.id
+                                selected=form && String(form.category_id) === String(category.id)
+                            )= category.name
+
+                .form-group
+                    label(for="unit") Unité
+
+                    select#unit(name="unit")
+                        option(
+                            value="piece"
+                            selected=!form || !form.unit || form.unit === 'piece'
+                        ) Pièce
+
+                        option(
+                            value="kg"
+                            selected=form && form.unit === 'kg'
+                        ) Kilogramme
+
+                        option(
+                            value="g"
+                            selected=form && form.unit === 'g'
+                        ) Gramme
+
+                        option(
+                            value="litre"
+                            selected=form && form.unit === 'litre'
+                        ) Litre
+
+                        option(
+                            value="metre"
+                            selected=form && form.unit === 'metre'
+                        ) Mètre
+
+                        option(
+                            value="carton"
+                            selected=form && form.unit === 'carton'
+                        ) Carton
+
+            .form-row
+
+                .form-group
+                    label(for="purchase_price") Prix d'achat
+                    input#purchase_price(
+                        type="number"
+                        name="purchase_price"
+                        value=form && form.purchase_price !== undefined ? form.purchase_price : 0
+                        min="0"
+                        step="0.01"
+                        required
+                    )
+
+                .form-group
+                    label(for="sale_price") Prix de vente
+                    input#sale_price(
+                        type="number"
+                        name="sale_price"
+                        value=form && form.sale_price !== undefined ? form.sale_price : 0
+                        min="0"
+                        step="0.01"
+                        required
+                    )
+
+            .form-group
+                label(for="minimum_stock") Stock minimum
+
+                input#minimum_stock(
+                    type="number"
+                    name="minimum_stock"
+                    value=form && form.minimum_stock !== undefined ? form.minimum_stock : 0
+                    min="0"
+                    step="0.01"
+                    required
+                )
+
+            .form-group
+                label(for="description") Description
+
+                textarea#description(
+                    name="description"
+                    rows="5"
+                    maxlength="1000"
+                )= form && form.description ? form.description : ''
+
+            .form-section
+
+                h3 Fournisseurs
+
+                p.form-help
+                    | Sélectionnez les fournisseurs associés à ce produit.
+
+                if suppliers.length
+                    .permission-grid
+                        each supplier in suppliers
+                            label.permission-item
+                                input(
+                                    type="checkbox"
+                                    name="supplier_ids"
+                                    value=supplier.id
+                                    checked=form && form.supplier_ids && form.supplier_ids.map(String).includes(String(supplier.id))
+                                )
+
+                                span.permission-content
+                                    strong= supplier.name
+                                    span= supplier.code
+                else
+                    p.text-muted
+                        | Aucun fournisseur disponible.
+
+            .form-actions
+
+                a.btn.btn-secondary(
+                    href="/products"
+                )
+                    | Annuler
+
+                button.btn.btn-primary(
+                    type="submit"
+                )
+                    | Créer le produit

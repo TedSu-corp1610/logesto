@@ -1,0 +1,66 @@
+doctype html
+html
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{title}
+        link(rel="stylesheet", href="/css/style.css")
+
+    body
+
+        .auth-container
+
+            .auth-box
+
+                h1 Créer un compte
+
+                if error
+                    .alert.error
+                        | #{error}
+
+                form(method="POST", action="/register")
+
+                    .form-group
+                        label(for="username") Nom d'utilisateur
+                        input(
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Nom d'utilisateur"
+                            value=username || ''
+                        )
+
+                    .form-group
+                        label(for="email") Adresse email
+                        input(
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Adresse email"
+                            value=email || ''
+                        )
+
+                    .form-group
+                        label(for="password") Mot de passe
+                        input(
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Mot de passe"
+                        )
+
+                    .form-group
+                        label(for="password_confirm") Confirmer le mot de passe
+                        input(
+                            type="password"
+                            id="password_confirm"
+                            name="password_confirm"
+                            placeholder="Confirmer le mot de passe"
+                        )
+
+                    button.btn(type="submit")
+                        | Créer mon compte
+
+                p.auth-link
+                    | Vous avez déjà un compte ?
+                    a(href="/login") Se connecter

@@ -1,0 +1,171 @@
+extends ../layouts/main
+
+block content
+
+    .page-toolbar
+
+        .page-toolbar-left
+
+            p.page-description
+                | Gérez les comptes utilisateurs de votre application.
+
+
+        .page-toolbar-right
+
+            if permissions.includes('users.create')
+
+                a.btn.btn-primary(
+                    href="/users/create"
+                )
+                    | + Nouvel utilisateur
+
+
+    .panel
+
+        .panel-header
+
+            .panel-title
+
+                h2
+                    | Liste des utilisateurs
+
+                span.panel-count
+                    | #{users.length}
+
+
+            .panel-tools
+
+                input.table-search(
+                    type="search"
+                    placeholder="Rechercher..."
+                    data-table-search="#usersTable"
+                )
+
+
+        .table-wrapper
+
+            table.data-table#usersTable
+
+                thead
+
+                    tr
+
+                        th
+                            | Utilisateur
+
+                        th
+                            | Email
+
+                        th
+                            | Rôle
+
+                        th
+                            | Créé le
+
+                        th.actions-column
+                            | Actions
+
+
+                tbody
+
+                    each item in users
+
+                        tr
+
+                            td
+
+                                .table-user
+
+                                    .table-avatar
+
+                                        | #{item.username.charAt(0).toUpperCase()}
+
+
+                                    .table-user-info
+
+                                        strong
+                                            | #{item.username}
+
+                                        small
+                                            | ID ##{item.id}
+
+
+                            td
+                                | #{item.email}
+
+
+                            td
+
+                                if item.role_name
+
+                                    span.badge
+
+                                        | #{item.role_name}
+
+                                else
+
+                                    span.badge.badge-muted
+                                        | Aucun rôle
+
+
+                            td
+
+                                if item.created_at
+
+                                    | #{item.created_at}
+
+                                else
+
+                                    | —
+
+
+                            td.actions-column
+
+                                .table-actions
+
+                                    if permissions.includes('users.edit')
+
+                                        a.action-btn(
+                                            href=`/users/${item.id}/edit`
+                                            title="Modifier"
+                                        )
+                                            | ✏️
+
+
+                                    if permissions.includes('users.delete') && item.id !== user.id
+
+                                        form(
+                                            action=`/users/${item.id}/delete`
+                                            method="POST"
+                                            onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?')"
+                                        )
+
+                                            button.action-btn.danger(
+                                                type="submit"
+                                                title="Supprimer"
+                                            )
+                                                | 🗑️
+
+
+                                    if item.id === user.id
+
+                                        span.current-user
+                                            | Vous
+
+
+                    if users.length === 0
+
+                        tr
+
+                            td.empty-state(
+                                colspan="5"
+                            )
+
+                                .empty-icon
+                                    | 👥
+
+                                strong
+                                    | Aucun utilisateur
+
+                                p
+                                    | Aucun utilisateur n'est enregistré.

@@ -1,0 +1,234 @@
+aside.main-sidebar
+
+    .sidebar-user
+
+        .sidebar-avatar
+            | #{user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+
+        .sidebar-user-info
+
+            strong
+                | #{user ? user.username : 'Utilisateur'}
+
+            small
+                | #{user && user.role_name ? user.role_name : 'Utilisateur'}
+
+
+    nav.sidebar-nav
+
+        .nav-section
+            | PRINCIPAL
+
+        a.sidebar-link(
+            href="/dashboard"
+            class=activePage === 'dashboard' ? 'active' : ''
+        )
+
+            span.sidebar-icon
+                | 🏠
+
+            span.sidebar-text
+                | Dashboard
+
+
+        .nav-section
+            | GESTION
+
+
+        if permissions && (permissions.includes('stores.view') || permissions.includes('locations.view') || permissions.includes('categories.view') || permissions.includes('suppliers.view') || permissions.includes('products.view') || permissions.includes('stock.view') || permissions.includes('stock.transfers.view') || permissions.includes('stock.inventory'))
+            .sidebar-dropdown#stock-dropdown
+                .sidebar-dropdown-header(
+                    onclick="toggleSidebarDropdown('stock-dropdown')"
+                )
+                    span.sidebar-icon
+                        | 📦
+
+                    span.sidebar-text
+                        | Stock
+
+                    span.sidebar-dropdown-arrow
+                        | ▼
+
+                .sidebar-dropdown-content
+
+                    if permissions && permissions.includes('stores.view')
+                        a.sidebar-link(
+                            href="/stores"
+                            class=activePage === 'stores' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 🏪
+
+                            span
+                                | Magasins
+
+                    if permissions && permissions.includes('locations.view')
+                        a.sidebar-link(
+                            href="/stock-locations"
+                            class=activePage === 'stockLocations' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 📍
+
+                            span
+                                | Emplacements
+
+                    if permissions && permissions.includes('categories.view')
+                        a.sidebar-link(
+                            href="/categories"
+                            class=activePage === 'categories' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 📂
+
+                            span
+                                | Catégories
+
+                    if permissions && permissions.includes('suppliers.view')
+                        a.sidebar-link(
+                            href="/suppliers"
+                            class=activePage === 'suppliers' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 🏭
+
+                            span
+                                | Fournisseurs
+
+                    if permissions && permissions.includes('products.view')
+                        a.sidebar-link(
+                            href="/products"
+                            class=activePage === 'products' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 📦
+
+                            span
+                                | Produits
+
+                    if permissions && permissions.includes('stock.view')
+                        a.sidebar-link(
+                            href="/stock"
+                            class=activePage === 'stock' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 📊
+
+                            span
+                                | Stocks
+
+                    if permissions && permissions.includes('stock.transfers.view')
+                        a.sidebar-link(
+                            href="/stock-transfers"
+                            class=activePage === 'stockTransfers' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 🔄
+
+                            span
+                                | Transferts
+
+                    if permissions && permissions.includes('stock.inventory')
+                        a.sidebar-link(
+                            href="/inventory"
+                            class=activePage === 'inventory' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 📝
+
+                            span
+                                | Inventaires
+
+
+        if permissions && (permissions.includes('users.view') || permissions.includes('permissions.view') || permissions.includes('roles.view'))
+            .sidebar-dropdown#admin-dropdown
+                .sidebar-dropdown-header(
+                    onclick="toggleSidebarDropdown('admin-dropdown')"
+                )
+                    span.sidebar-icon
+                        | ⚙️
+
+                    span.sidebar-text
+                        | Administration
+
+                    span.sidebar-dropdown-arrow
+                        | ▼
+
+                .sidebar-dropdown-content
+
+                    if permissions && permissions.includes('users.view')
+                        a.sidebar-link(
+                            href="/users"
+                            class=activePage === 'users' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 👥
+
+                            span.sidebar-text
+                                | Utilisateurs
+
+                    if permissions && permissions.includes('permissions.view')
+                        a.sidebar-link(
+                            href="/permissions"
+                            class=activePage === 'permissions' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 🔐
+
+                            span
+                                | Permissions
+
+                    if permissions && permissions.includes('roles.view')
+                        a.sidebar-link(
+                            href="/roles"
+                            class=activePage === 'roles' ? 'active' : ''
+                        )
+                            span.sidebar-icon
+                                | 🔑
+
+                            span
+                                | Rôles
+
+        .nav-section
+            | MON ESPACE
+
+
+        if permissions && permissions.includes('profile.view')
+
+            a.sidebar-link(
+                href="/profile"
+                class=activePage === 'profile' ? 'active' : ''
+            )
+
+                span.sidebar-icon
+                    | 👤
+
+                span.sidebar-text
+                    | Mon profil
+
+
+        if permissions && permissions.includes('chat.use')
+
+            a.sidebar-link(
+                href="/chat"
+                class=activePage === 'chat' ? 'active' : ''
+            )
+
+                span.sidebar-icon
+                    | 💬
+
+                span.sidebar-text
+                    | Chat
+
+
+        .sidebar-bottom
+
+            a.sidebar-link.logout-link(
+                href="/logout"
+            )
+
+                span.sidebar-icon
+                    | ↪
+
+                span.sidebar-text
+                    | Déconnexion

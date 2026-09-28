@@ -1,0 +1,105 @@
+extends ../layouts/main
+
+block content
+
+    .form-page
+
+        .panel.form-panel
+
+            .panel-header
+
+                h2
+                    | Nouvel utilisateur
+
+            .panel-body
+
+                form(
+                    action="/users"
+                    method="POST"
+                )
+
+                    .form-grid
+
+                        .form-group
+
+                            label(
+                                for="username"
+                            )
+                                | Nom d'utilisateur
+
+                            input.form-control(
+                                type="text"
+                                id="username"
+                                name="username"
+                                required
+                                autocomplete="username"
+                            )
+
+
+                        .form-group
+
+                            label(
+                                for="email"
+                            )
+                                | Adresse email
+
+                            input.form-control(
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                autocomplete="email"
+                            )
+
+
+                        .form-group
+
+                            label(
+                                for="password"
+                            )
+                                | Mot de passe
+
+                            input.form-control(
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                autocomplete="new-password"
+                            )
+
+
+                        .form-group
+
+                            label(
+                                for="role_id"
+                            )
+                                | Rôle
+
+                            select.form-control(
+                                id="role_id"
+                                name="role_id"
+                                required
+                            )
+
+                                option(value="")
+                                    | Sélectionner un rôle
+
+                                each role in roles
+
+                                    option(
+                                        value=role.id
+                                    )
+                                        | #{role.name}
+
+
+                    .form-actions
+
+                        a.btn.btn-secondary(
+                            href="/users"
+                        )
+                            | Annuler
+
+                        button.btn.btn-primary(
+                            type="submit"
+                        )
+                            | Créer l'utilisateur

@@ -1,0 +1,49 @@
+doctype html
+html
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{title}
+        link(rel="stylesheet", href="/css/style.css")
+
+    body
+
+        .auth-container
+
+            .auth-box
+
+                h1 Connexion
+
+                if error
+                    .alert.error
+                        | #{error}
+
+                form(method="POST", action="/login")
+
+                    .form-group
+                        label(for="email") Adresse email
+
+                        input(
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Adresse email"
+                            value=email || ''
+                        )
+
+                    .form-group
+                        label(for="password") Mot de passe
+
+                        input(
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Mot de passe"
+                        )
+
+                    button.btn(type="submit")
+                        | Se connecter
+
+                p.auth-link
+                    | Vous n'avez pas encore de compte ?
+                    a(href="/register") Créer un compte

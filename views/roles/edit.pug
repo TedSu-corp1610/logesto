@@ -1,0 +1,97 @@
+extends ../layouts/main
+
+block content
+
+    .panel.form-panel
+
+        .panel-header
+            h2
+                | Modifier le rôle
+
+        .panel-body
+
+            form(
+                action="/roles/" + role.id + "/edit"
+                method="POST"
+            )
+
+                .form-group
+
+                    label(
+                        for="name"
+                    )
+                        | Nom du rôle
+
+                    input.form-control(
+                        type="text"
+                        id="name"
+                        name="name"
+                        value=role.name
+                        required
+                    )
+
+                .form-group
+
+                    label(
+                        for="description"
+                    )
+                        | Description
+
+                    textarea.form-control(
+                        id="description"
+                        name="description"
+                        rows="4"
+                    ) #{role.description || ''}
+
+
+                .form-section
+
+                    h3
+                        | Permissions
+
+                    p.form-help
+                        | Sélectionnez les permissions accordées à ce rôle.
+
+
+                    if permissions.length
+
+                        .permission-grid
+
+                            each permission in permissions
+
+                                label.permission-item
+
+                                    input(
+                                        type="checkbox"
+                                        name="permissions"
+                                        value=permission.id
+                                        checked=rolePermissionIds.includes(permission.id)
+                                    )
+
+                                    .permission-content
+
+                                        strong
+                                            | #{permission.name}
+
+                                        if permission.description
+                                            span
+                                                | #{permission.description}
+
+                    else
+
+                        .empty-state
+                            p
+                                | Aucune permission disponible.
+
+
+                .form-actions
+
+                    a.btn.btn-secondary(
+                        href="/roles"
+                    )
+                        | Annuler
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Enregistrer

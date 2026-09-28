@@ -1,0 +1,94 @@
+extends ../layouts/main
+
+block content
+
+    .panel
+        .panel-header
+            div
+                h1 Nouveau fournisseur
+                p Ajouter un fournisseur
+
+        .panel-body
+
+            if error
+                .alert.alert-danger
+                    = error
+
+            form.form(
+                action="/suppliers/create"
+                method="POST"
+            )
+
+                .form-row
+
+                    .form-group
+                        label(for="name") Nom
+                        input#name(
+                            type="text"
+                            name="name"
+                            value=form && form.name ? form.name : ''
+                            required
+                            maxlength="150"
+                        )
+
+                    .form-group
+                        label(for="code") Code
+                        input#code(
+                            type="text"
+                            name="code"
+                            value=form && form.code ? form.code : ''
+                            required
+                            maxlength="50"
+                            style="text-transform: uppercase;"
+                        )
+
+                .form-row
+
+                    .form-group
+                        label(for="contact_name") Nom du contact
+                        input#contact_name(
+                            type="text"
+                            name="contact_name"
+                            value=form && form.contact_name ? form.contact_name : ''
+                            maxlength="150"
+                        )
+
+                    .form-group
+                        label(for="phone") Téléphone
+                        input#phone(
+                            type="text"
+                            name="phone"
+                            value=form && form.phone ? form.phone : ''
+                            maxlength="50"
+                        )
+
+                .form-row
+
+                    .form-group
+                        label(for="email") Email
+                        input#email(
+                            type="email"
+                            name="email"
+                            value=form && form.email ? form.email : ''
+                            maxlength="150"
+                        )
+
+                    .form-group
+                        label(for="address") Adresse
+                        input#address(
+                            type="text"
+                            name="address"
+                            value=form && form.address ? form.address : ''
+                            maxlength="255"
+                        )
+
+                .form-actions
+                    a.btn.btn-secondary(
+                        href="/suppliers"
+                    )
+                        | Annuler
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Créer le fournisseur

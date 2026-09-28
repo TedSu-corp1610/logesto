@@ -1,0 +1,76 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Stocks
+            p État actuel des stocks par emplacement
+
+        if permissions && permissions.includes('stock.manage')
+            a.btn.btn-primary(
+                href="/stock/movement"
+            )
+                | Nouveau mouvement
+
+    .panel
+
+        .panel-header
+            h2 État des stocks
+
+        if stocks.length
+            .table-wrapper
+                table.data-table
+                    thead
+                        tr
+                            th Produit
+                            th SKU
+                            th Magasin
+                            th Emplacement
+                            th Quantité
+                            th Minimum
+                            th État
+
+                    tbody
+                        each stock in stocks
+                            tr
+                                td
+                                    strong= stock.product_name
+
+                                td
+                                    code= stock.sku
+
+                                td
+                                    = stock.store_name
+
+                                td
+                                    = stock.location_name
+
+                                td
+                                    strong
+                                        | #{stock.quantity} #{stock.unit}
+
+                                td
+                                    | #{stock.minimum_stock} #{stock.unit}
+ 
+                                td
+                                    if stock.inventory_locked
+                                        span.badge.badge-warning
+                                            | Inventaire en cours
+                                    else if stock.quantity <= stock.minimum_stock && stock.minimum_stock > 0
+                                        span.badge.badge-danger
+                                            | Stock faible
+                                    else
+                                        span.badge.badge-success
+                                            | Normal
+
+        else
+            .empty-state
+                h3 Aucun stock
+                p Aucun stock n'a encore été enregistré.
+
+                if permissions && permissions.includes('stock.manage')
+                    a.btn.btn-primary(
+                        href="/stock/movement"
+                    )
+                        | Faire une entrée

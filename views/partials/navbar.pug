@@ -1,0 +1,69 @@
+header.main-header
+
+    .header-left
+
+        button#sidebarToggle.sidebar-toggle(
+            type="button"
+            aria-label="Ouvrir le menu"
+        )
+            span
+            span
+            span
+
+        a.brand(
+            href="/dashboard"
+        )
+            span.brand-icon
+                | A
+
+            span.brand-text
+                | Admin
+
+
+    .header-right
+
+        button.header-button(
+            type="button"
+            title="Notifications"
+        )
+            span.icon
+                | 🔔
+
+            span.notification-badge
+                | 3
+
+
+        .user-menu
+
+            button.user-menu-button(
+                type="button"
+            )
+
+                span.user-avatar
+                    | #{user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+
+                span.user-name
+                    | #{user ? user.username : 'Utilisateur'}
+
+                span.arrow
+                    | ▾
+
+
+            .user-dropdown
+
+                a(
+                    href="/profile"
+                )
+                    | 👤 Mon profil
+
+                a(
+                    href="/dashboard"
+                )
+                    | ⚙ Paramètres
+
+                .dropdown-divider
+
+                a.logout-link(
+                    href="/logout"
+                )
+                    | ↪ Déconnexion

@@ -1,0 +1,117 @@
+extends ../layouts/main
+
+block content
+
+    .panel.form-panel
+
+        .panel-header
+
+            h2
+                | Nouvel emplacement
+
+
+        .panel-body
+
+            if stores.length
+
+                form(
+                    action="/stock-locations/create"
+                    method="POST"
+                )
+
+                    .form-group
+
+                        label(for="store_id")
+                            | Magasin
+
+                        select.form-control(
+                            id="store_id"
+                            name="store_id"
+                            required
+                        )
+
+                            option(
+                                value=""
+                            )
+                                | Sélectionnez un magasin
+
+                            each store in stores
+
+                                if store.status === 'active'
+
+                                    option(
+                                        value=store.id
+                                    )
+                                        | #{store.name} (#{store.code})
+
+
+                    .form-group
+
+                        label(for="name")
+                            | Nom de l'emplacement
+
+                        input.form-control(
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Ex: Réserve"
+                            required
+                        )
+
+
+                    .form-group
+
+                        label(for="code")
+                            | Code
+
+                        input.form-control(
+                            type="text"
+                            id="code"
+                            name="code"
+                            placeholder="Ex: RESERVE"
+                            required
+                        )
+
+
+                    .form-group
+
+                        label(for="description")
+                            | Description
+
+                        textarea.form-control(
+                            id="description"
+                            name="description"
+                            rows="4"
+                            placeholder="Description de l'emplacement"
+                        )
+
+
+                    .form-actions
+
+                        a.btn.btn-secondary(
+                            href="/stock-locations"
+                        )
+                            | Annuler
+
+                        button.btn.btn-primary(
+                            type="submit"
+                        )
+                            | Créer l'emplacement
+
+            else
+
+                .empty-state
+
+                    .empty-state-icon
+                        | 🏪
+
+                    h3
+                        | Aucun magasin
+
+                    p
+                        | Vous devez créer un magasin avant de pouvoir créer un emplacement.
+
+                    a.btn.btn-primary(
+                        href="/stores/create"
+                    )
+                        | Créer un magasin

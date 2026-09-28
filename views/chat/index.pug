@@ -1,0 +1,101 @@
+extends ../layouts/main
+
+block content 
+
+    .chat-layout(data-current-user-id=user.id)
+
+        .chat-users.panel
+
+            .panel-header
+                h2
+                    | Conversations
+
+            .chat-user-list
+
+                if chatUsers.length
+
+                    each chatUser in chatUsers
+
+                        button.chat-user(
+                            type="button"
+                            data-user-id=chatUser.id
+                            data-username=chatUser.username
+                        )
+
+                            .chat-user-avatar
+                                | #{chatUser.username.charAt(0).toUpperCase()}
+
+                            .chat-user-info
+                                strong
+                                    | #{chatUser.username}
+
+                                span.chat-user-status(
+                                    data-status-user-id=chatUser.id
+                                )
+                                    | Hors ligne
+
+                            if unreadCounts && unreadCounts[chatUser.id]
+                                span.chat-unread-badge(
+                                    data-unread-user-id=chatUser.id
+                                )
+                                    | #{unreadCounts[chatUser.id]}
+                else
+
+                    .empty-state
+                        .empty-state-icon
+                            | 💬
+
+                        h3
+                            | Aucun utilisateur
+
+                        p
+                            | Il n'y a personne d'autre avec qui discuter.
+
+
+        .chat-window.panel
+
+            .chat-header
+
+                .chat-current-user
+                    .chat-user-avatar
+                        | ?
+
+                    .chat-current-user-info
+                        strong
+                            | Sélectionnez une conversation
+
+                        span
+                            | Aucun utilisateur sélectionné
+
+
+            .chat-messages
+                .chat-empty
+                    .chat-empty-icon
+                        | 💬
+
+                    h3
+                        | Votre messagerie
+
+                    p
+                        | Sélectionnez un utilisateur pour commencer une conversation.
+
+
+            form.chat-form
+
+                input.chat-input(
+                    type="text"
+                    placeholder="Écrivez votre message..."
+                    autocomplete="off"
+                    disabled
+                )
+
+                button.btn.btn-primary(
+                    type="submit"
+                    disabled
+                )
+                    | Envoyer
+
+block scripts
+
+    script(src="/socket.io/socket.io.js")
+    script(src="/js/chat.js")

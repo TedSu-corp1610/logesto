@@ -1,0 +1,94 @@
+extends ../layouts/main
+
+block content
+
+    .panel.form-panel
+
+        .panel-header
+            h2
+                | Nouveau magasin
+
+        .panel-body
+
+            form(
+                action="/stores/create"
+                method="POST"
+            )
+
+                .form-group
+
+                    label(for="name")
+                        | Nom du magasin
+
+                    input.form-control(
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Ex: Magasin Cocody"
+                        required
+                    )
+
+
+                .form-group
+
+                    label(for="code")
+                        | Code
+
+                    input.form-control(
+                        type="text"
+                        id="code"
+                        name="code"
+                        placeholder="Ex: MAG-COCODY"
+                        required
+                    )
+
+
+                .form-group
+
+                    label(for="address")
+                        | Adresse
+
+                    textarea.form-control(
+                        id="address"
+                        name="address"
+                        rows="3"
+                    )
+
+
+                .form-row
+
+                    .form-group
+
+                        label(for="phone")
+                            | Téléphone
+
+                        input.form-control(
+                            type="text"
+                            id="phone"
+                            name="phone"
+                        )
+
+
+                    .form-group
+
+                        label(for="email")
+                            | Email
+
+                        input.form-control(
+                            type="email"
+                            id="email"
+                            name="email"
+                        )
+
+
+                .form-actions
+
+                    a.btn.btn-secondary(
+                        href="/stores"
+                    )
+                        | Annuler
+
+                    button.btn.btn-primary(
+                        type="submit"
+                    )
+                        | Créer le magasin

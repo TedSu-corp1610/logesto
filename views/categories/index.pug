@@ -1,0 +1,71 @@
+extends ../layouts/main
+
+block content
+
+    .page-header
+        div
+            h1 Catégories
+            p Gestion des catégories de produits
+
+        if permissions.includes('categories.manage')
+            a.btn.btn-primary(href="/categories/create")
+                | Nouvelle catégorie
+
+    .panel
+
+        .panel-header
+            h2 Liste des catégories
+
+        if categories.length
+            .table-wrapper
+                table.data-table
+                    thead
+                        tr
+                            th Nom
+                            th Description
+                            th Statut
+                            th Actions
+
+                    tbody
+                        each category in categories
+                            tr
+                                td
+                                    strong= category.name
+
+                                td
+                                    if category.description
+                                        = category.description
+                                    else
+                                        span.text-muted Aucune description
+
+                                td
+                                    if category.status === 'active'
+                                        span.badge.badge-success Active
+                                    else
+                                        span.badge.badge-danger Inactive
+
+                                td
+                                    .table-actions
+                                        if permissions.includes('categories.manage')
+                                            a.btn.btn-sm.btn-secondary(
+                                                href=`/categories/${category.id}/edit`
+                                            )
+                                                | Modifier
+
+                                            form(
+                                                action=`/categories/${category.id}/delete`
+                                                method="POST"
+                                                onsubmit="return confirm('Supprimer cette catégorie ?');"
+                                            )
+                                                button.btn.btn-sm.btn-danger(
+                                                    type="submit"
+                                                )
+                                                    | Supprimer
+        else
+            .empty-state
+                h3 Aucune catégorie
+                p Commencez par créer votre première catégorie.
+
+                if permissions.includes('categories.manage')
+                    a.btn.btn-primary(href="/categories/create")
+                        | Créer une catégorie

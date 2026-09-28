@@ -1,0 +1,95 @@
+extends ../layouts/main
+
+block content
+
+    .page-toolbar
+
+        .page-toolbar-left
+            h2
+                | Liste des rôles
+
+            p
+                | Gérez les rôles et leurs permissions.
+
+        if permissions && permissions.includes('roles.manage')
+            .page-toolbar-right
+                a.btn.btn-primary(
+                    href="/roles/create"
+                )
+                    | + Nouveau rôle
+
+
+    .panel
+
+        .panel-header
+            h2
+                | Rôles
+
+            input.form-control.table-search(
+                type="search"
+                placeholder="Rechercher..."
+                data-table-search="#rolesTable"
+            )
+
+        .panel-body.no-padding
+
+            table.data-table#rolesTable
+
+                thead
+                    tr
+                        th
+                            | Nom
+                        th
+                            | Description
+                        th
+                            | Actions
+
+                tbody
+
+                    if roles.length
+
+                        each role in roles
+
+                            tr
+
+                                td
+                                    strong
+                                        | #{role.name}
+
+                                td
+                                    | #{role.description || '—'}
+
+                                td.table-actions
+
+                                    if permissions && permissions.includes('roles.manage')
+
+                                        a.btn.btn-sm.btn-secondary(
+                                            href="/roles/" + role.id + "/edit"
+                                        )
+                                            | Modifier
+
+                                        form(
+                                            action="/roles/" + role.id + "/delete"
+                                            method="POST"
+                                            onsubmit="return confirm('Supprimer ce rôle ?');"
+                                        )
+                                            button.btn.btn-sm.btn-danger(
+                                                type="submit"
+                                            )
+                                                | Supprimer
+
+                    else
+
+                        tr
+                            td(
+                                colspan="3"
+                            )
+                                .empty-state
+                                    .empty-state-icon
+                                        | 🔑
+
+                                    h3
+                                        | Aucun rôle
+
+                                    p
+                                        | Aucun rôle n'est enregistré.
